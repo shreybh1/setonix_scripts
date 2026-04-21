@@ -30,6 +30,6 @@ cd ${LFRIC_APPS}/build
 rm -rf ${LFRIC_APPS}/applications/${APP}/working
 
 # -p meto-azspice means openmp
-VERBOSE=1 python local_build.py -a ${APP} -c $LFRIC_CORE -p meto-azspice -j 64 2>&1 | tee output.out
+VERBOSE=1 python local_build.py -a ${APP} -c $LFRIC_CORE -p meto-azspice -o production -j 64 2>&1 | tee output.out
 
 echo "Job ended " $(date +"%T") # start time
