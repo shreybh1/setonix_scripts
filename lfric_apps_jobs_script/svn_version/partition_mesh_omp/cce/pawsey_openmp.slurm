@@ -1,6 +1,7 @@
 #!/bin/bash --login
 #SBATCH --job-name=lfric
 #SBATCH --time=0:30:00
+#SBATCH --account=n02-NGARCH
 #SBATCH --exclude=nid00[2024-2055],nid00[2792-2823]
 #SBATCH --exclusive
 #SBATCH --partition=work
@@ -55,7 +56,6 @@ cp ${SLURM_SUBMIT_DIR}/pawsey.slurm ${OUTPUT_DIR}
 echo "Job started " $(date +"%T") 
 echo "Output directory " ${OUTPUT_DIR}
 
-# use block:block:block to get consecutive distribution of threads
 srun -N ${SLURM_JOB_NUM_NODES} -n ${SLURM_NTASKS} -c ${OMP_NUM_THREADS} -m block:block:block  ${EXE} config_mesh${MESH_SIZE}_layers${NUM_LAYERS}.nml >> ${OUTPUT_FILE} 
 
 #wait && rm *.err *.out *.nc 
