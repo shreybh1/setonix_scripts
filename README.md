@@ -15,3 +15,9 @@ LFRIC core: `git clone https://github.com/MetOffice/lfric_core.git`
 
 LFRIC apps: `git clone https://github.com/MetOffice/lfric_apps.git`
 
+# LFRIC job submission scripts 
+## C1536 partitioned jobs
+Run `./runscript.sh` which sets the correct number of threads for the number of partitions and calls `pawsey_openmp.slurm`
+
+## For non partitioned jobs
+Run `pawsey_openmp.slurm`
