@@ -4,22 +4,22 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=64
 #SBATCH --cpus-per-task=1
-#SBATCH --account=pawsey0835
+
 #SBATCH --partition=debug
 
 echo "Job started " $(date +"%T") 
 
 # load correct modules depending on compiler selection. 
 # Choose from gcc or cce 
-export COMPILER_VER=gcc
+export COMPILER_VER=cce
 
 if [[ "${COMPILER_VER}" == "cce" ]]; then 
   # CCE 
-  module load lfric/cce/18.0.1
   module use /software/projects/pawsey0835/ddeeptimahanti/modules
+  module load lfric/cce/18.0.1
+  module load .py-psyclone/3.1.0-vlt43v4  # py-psyclone/3.2 does not work 
   module use /software/projects/pawsey0835/ddeeptimahanti/setonix/2025.04/modules/zen3/gcc/13.3.0/dependencies
   module use /software/projects/pawsey0835/ddeeptimahanti/setonix/2025.04/modules/zen3/gcc/13.3.0/astro-applications/
-  module load  .py-psyclone/3.1.0-vlt43v4  # py-psyclone/3.2 does not work 
   module load .pfunit/4.10.0-twwu3qk
   module load .fcm/2021.05.0-65djiil
 elif [[ "${COMPILER_VER}" == "gcc" ]]; then 
