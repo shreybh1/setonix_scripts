@@ -7,13 +7,13 @@
 #SBATCH -m block:block:block
 
 # Modules
-module use /software/projects/pawsey0835/ddeeptimahanti/modules
-module load lfric/cce/18.0.1
-module load .py-psyclone/3.1.0-vlt43v4  # py-psyclone/3.2 does not work 
-module use /software/projects/pawsey0835/ddeeptimahanti/setonix/2025.04/modules/zen3/gcc/13.3.0/dependencies
-module use /software/projects/pawsey0835/ddeeptimahanti/setonix/2025.04/modules/zen3/gcc/13.3.0/astro-applications/
-module load .pfunit/4.10.0-twwu3qk
-module load .fcm/2021.05.0-65djiil
+module use /software/setonix/2025.08/modules/zen3/gcc/14.2.0/dependencies
+module load .time/1.9-lsi4ax6 
+module use /software/projects/pawsey0835/ddeeptimahanti/modules/
+module load lfric/gcc/14.2
+module unload .cray-mpich/9.0.1-t6yjuyi 
+module load .py-pyyaml/6.0.2-mysz5xs
+
 export FC=ftn
 
 # OpenMP settings
@@ -36,8 +36,7 @@ export CPT=${SLURM_CPUS_PER_TASK}
 export OUTPUT_DIR=${SLURM_SUBMIT_DIR}/${DIRECTORY_NAME}/${SLURM_NNODES}_${PPN}_${CPT}/MESH_${MESH_SIZE}/PARTITION_${PARTITION_SIZE}/LAYER_${NUM_LAYERS}/${SLURM_ARRAY_TASK_ID}
 export MESH_DIR="/scratch/pawsey0835/sbhardwaj/met-lfric_pawsey/meshes_dir"
 export OUTPUT_FILE=output.txt 
-# EXE=$(cd ../ && echo $(pwd))/bin/gungho_model
-EXE=/scratch/pawsey0835/sbhardwaj/met-lfric_pawsey/svn_version/cce/lfric_apps/applications/gungho_model/bin/gungho_model
+EXE=$(cd ../ && echo $(pwd))/bin/gungho_model
 
 # create and cd into output directory
 rm -rf ${OUTPUT_DIR}
@@ -46,10 +45,10 @@ cd ${OUTPUT_DIR}
 
 #set up output directory with all required files + mesh configs
 cp -r ${MESH_DIR}/C${MESH_SIZE}_${PARTITION_SIZE}/* ${OUTPUT_DIR} # mesh files with partitions
-#cp ${MESH_DIR}/C${MESH_SIZE}_mesh.nc ${OUTPUT_DIR} # mesh files with partitions
+#cp ${MESH_DIR}/C${MESH_SIZE}_mesh.nc ${OUTPUT_DIR} # mesh files without partitions
 cp ${SLURM_SUBMIT_DIR}/*.xml ${OUTPUT_DIR}  
 cp ${SLURM_SUBMIT_DIR}/config_files/config_mesh${MESH_SIZE}_layers${NUM_LAYERS}.nml ${OUTPUT_DIR}
-cp ${SLURM_SUBMIT_DIR}/pawsey.slurm ${OUTPUT_DIR}
+cp ${SLURM_SUBMIT_DIR}/pawsey_openmp.slurm ${OUTPUT_DIR}
 
 # Run job
 echo "Job started " $(date +"%T") 
@@ -58,7 +57,7 @@ echo "Output directory " ${OUTPUT_DIR}
 # use block:block:block to get consecutive distribution of threads
 srun -N ${SLURM_JOB_NUM_NODES} -n ${SLURM_NTASKS} -c ${OMP_NUM_THREADS} -m block:block:block  ${EXE} config_mesh${MESH_SIZE}_layers${NUM_LAYERS}.nml >> ${OUTPUT_FILE} 
 
-#wait && rm *.err *.out *.nc 
+wait && rm *.err *.out *.nc 
 echo "Job ended " $(date +"%T") # start time
 
 sacct -j $SLURM_JOB_ID --format=JobID,User,NNodes,Elapsed,MaxRSS
