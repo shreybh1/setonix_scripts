@@ -9,11 +9,11 @@ LFRIC core: `svn co -r 53041 https://code.metoffice.gov.uk/svn/lfric/LFRic/trunk
 LFRIC apps: `svn co -r 11231 https://code.metoffice.gov.uk/svn/lfric_apps/main/trunk lfric_apps` 
 
 ## GCC version
-The GCC version is used for any developments after the SVN change-over.  
+The GCC version is used for any developments after the SVN change-over. Version 3.1 and 3.1.1 are used for lfric_core and lfric_apps  
 
-LFRIC core: `git clone https://github.com/MetOffice/lfric_core.git`
+LFRIC core: `git clone https://github.com/MetOffice/lfric_core.git lfric_core_vn3.1 && cd lfric_core_vn3.1 && get checkout vn3.1`
 
-LFRIC apps: `git clone https://github.com/MetOffice/lfric_apps.git`
+LFRIC apps: `git clone https://github.com/MetOffice/lfric_apps.git lfric_apps_vn3.1.1 && cd lfric_apps_vn3.1.1 && git checkout vn3.1.1`
 
 # LFRIC job submission scripts 
 ## C1536 partitioned jobs
