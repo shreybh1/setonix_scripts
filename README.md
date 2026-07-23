@@ -1,5 +1,7 @@
-# LFRIC compilation scripts 
+# LFRIC scripts for Setonix 
+Here are a collection of setonix scrtips for use with lfric. 
 
+# Get repository from svn/git. Now its mainly git. 
 ## SVN version
 The version used for the partitioned mesh 1536. 
 The repositories used are the following:
